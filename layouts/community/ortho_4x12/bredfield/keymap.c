@@ -1,5 +1,7 @@
 #include QMK_KEYBOARD_H
 
+// #include "common/keycode_functions.h"
+
 extern keymap_config_t keymap_config;
 
 // Keymap layers
@@ -21,7 +23,13 @@ enum layer_names {
 #define L_KEYBD MO(_KEYBOARD_LAYER)
 #define SCL_NAV LT(_NAVIGATION_LAYER, KC_SCLN)
 #define SFT_MIN MT(MOD_RSFT, KC_MINS)
-#define SFT_ENT KC_SFTENT
+#define RSFT_ENT KC_SFTENT
+#define LSFT_ENT LSFT_T(KC_ENT)
+#define SPC_ALT LALT_T(KC_SPACE)
+#define SPC_RAIS LT(_RAISE_LAYER, KC_SPACE)
+#define BSP_CTL LCTL_T(KC_BSPC)
+#define BSP_LOW LT(_LOWER_LAYER, KC_BSPC)
+#define TAB_ALT LALT_T(KC_TAB)
 
 // GUI chords
 #define GUI_1 LGUI(KC_1)
@@ -47,23 +55,26 @@ enum layer_names {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
+
+
 /* Qwerty
  * ,-----------------------------------------------------------------------------------------------------------.
- * |   Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    P   |   -    |
+ * |Tab/Alt |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    P   |   -    |
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
  * | GUI/Esc|    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |  ;/nav |   "    |
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
  * | Sft/ent|    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   | Sft/ent|
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |   UI   |  Ctrl  |  Alt   |  GUI   |  Lower |  Bksp  |  Space | Raise  |  Ctrl  |  Alt   | Numpad |  Keybd |
+ * |   UI   |  Del   |  Ctrl  |  Alt   |  GUI   |Bsp/Low |Spc/rais|  Ctrl  |   Alt  |  GUI   | Numpad |  Keybd |
  * `-----------------------------------------------------------------------------------------------------------'
  */
 [_BASE_LAYER] = LAYOUT_ortho_4x12(
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
+    TAB_ALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
     GUI_ESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    SCL_NAV, KC_QUOT,
-    SFT_ENT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT,
-    L_UI,    KC_LCTL, KC_LALT, KC_LGUI, L_LOWER, KC_BSPC, KC_SPACE,L_RAISE, KC_RCTRL,KC_RALT, L_NUMPAD,L_KEYBD
+    LSFT_ENT,KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_ENT,
+    L_UI,    KC_DEL,  KC_LCTL, KC_LALT, KC_LGUI, BSP_LOW, SPC_RAIS,KC_RCTL, KC_RALT, KC_RGUI, L_NUMPAD,L_KEYBD
 ),
+
 
 /* Lower
  * ,-----------------------------------------------------------------------------------------------------------.
@@ -73,14 +84,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
  * |        |        |        |        |        |        |        |        |   ,    |    .   |    /   |        |
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |  Del   |        |        |        |        |        |
+ * |        |        |        |        |        |        | Space  |        |        |        |        |        |
  * `-----------------------------------------------------------------------------------------------------------'
  */
 [_LOWER_LAYER] = LAYOUT_ortho_4x12(
     KC_GRV,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS, KC_EQL,  _______,
     _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSLS,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_COMM, KC_DOT,  KC_SLSH, _______,
-    _______, _______, _______, _______, _______, KC_DEL,  _______, _______, _______, _______, _______, _______
+    _______, _______, _______, _______, _______, _______, KC_SPACE, _______, _______, _______, _______, _______
 ),
 
 /* Raise
@@ -91,14 +102,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
  * |        |        |        |        |        |        |        |        |        |        |        |        |
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |   Del  |        |        |        |        |        |        |
+ * |        |        |        |        |        |  Bksp  |        |        |        |        |        |        |
  * `-----------------------------------------------------------------------------------------------------------'
  */
 [_RAISE_LAYER] = LAYOUT_ortho_4x12(
     KC_TILD, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_7,    KC_F8,   KC_F9,   KC_F10,  KC_UNDS,
     _______, XXXXXXX, KC_LCBR, KC_LBRC, KC_LPRN, KC_LABK, KC_RABK, KC_RPRN, KC_RBRC, KC_RCBR, XXXXXXX, KC_PIPE,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, _______, _______, _______, _______, KC_DEL,  _______, _______, _______, _______, _______, _______
+    _______, _______, _______, _______, _______, KC_BSPC, _______, _______, _______, _______, _______, _______
 ),
 
 /* Numpad
@@ -127,14 +138,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
  * |        |        |        |        |        |        |        |        |        |        |        |        |
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |  Enter |        |        |   Del  |        |        |        |        |
+ * |        |        |        |        |        |        |        |   Del  |        |        |        |        |
  * `-----------------------------------------------------------------------------------------------------------'
  */
 [_NAVIGATION_LAYER] = LAYOUT_ortho_4x12(
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_HOME, KC_UP,   KC_END,  XXXXXXX, XXXXXXX,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    _______, _______, _______, _______, KC_ENT,  _______, _______, KC_DEL,  _______, _______, _______, _______
+    _______, _______, _______, _______, _______,  _______, _______, _______,  _______, _______, _______, _______
 ),
 
 /* UI
@@ -145,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+--------+--------+--------+--------+-----------------+--------+--------------------------+--------|
  * |        |Full SS | Area SS|        |        |        |        |        |        |        |        |        |
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |  Prev  |  Play  | Next   |  Bri - |        |        |  Bri + |  Mute  | Vol -  | Vol +  |        |
+ * |        |  Prev  |  Play  | Next   | Vol -  |        |        |  Vol + |  Mute  |        |        |        |
  * `-----------------------------------------------------------------------------------------------------------'
  */
 [_UI_LAYER] = LAYOUT_ortho_4x12(
@@ -173,3 +184,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______
 ),
 };
+
+uint16_t get_tapping_term(uint16_t keycode) {
+  switch (keycode) {
+    default:
+      return TAPPING_TERM;
+  }
+}

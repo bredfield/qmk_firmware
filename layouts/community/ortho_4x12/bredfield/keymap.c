@@ -1,192 +1,110 @@
 #include QMK_KEYBOARD_H
 
-// #include "common/keycode_functions.h"
-
 extern keymap_config_t keymap_config;
 
 // Keymap layers
 enum layer_names {
     _BASE_LAYER,
-    _RAISE_LAYER,
     _LOWER_LAYER,
-    _NUMPAD_LAYER,
     _NAVIGATION_LAYER,
     _UI_LAYER,
-    _KEYBOARD_LAYER,
 };
 
+// Readability
+#define ___X___ XXXXXXX
+
 // Layer switches aliases
-#define L_LOWER MO(_LOWER_LAYER)
-#define L_RAISE MO(_RAISE_LAYER)
-#define L_NUMPAD MO(_NUMPAD_LAYER)
-#define L_UI MO(_UI_LAYER)
-#define L_KEYBD MO(_KEYBOARD_LAYER)
-#define SCL_NAV LT(_NAVIGATION_LAYER, KC_SCLN)
-#define SFT_MIN MT(MOD_RSFT, KC_MINS)
+#define L_LOWER  MO(_LOWER_LAYER)
+#define L_RAISE  MO(_RAISE_LAYER)
+#define L_UI     MO(_UI_LAYER)
+#define SCL_NAV  LT(_NAVIGATION_LAYER, KC_SCLN)
+#define BSP_LOW  LT(_LOWER_LAYER, KC_BSPC)
+
+// Mod taps
+#define GUI_ESC  LGUI_T(KC_ESC)
 #define RSFT_ENT KC_SFTENT
 #define LSFT_ENT LSFT_T(KC_ENT)
-#define SPC_ALT LALT_T(KC_SPACE)
-#define SPC_RAIS LT(_RAISE_LAYER, KC_SPACE)
-#define BSP_CTL LCTL_T(KC_BSPC)
-#define BSP_LOW LT(_LOWER_LAYER, KC_BSPC)
-#define TAB_ALT LALT_T(KC_TAB)
+#define TAB_ALT  LALT_T(KC_TAB)
+#define CTL_QUOT LCTL_T(KC_QUOT)
 
-// GUI chords
-#define GUI_1 LGUI(KC_1)
-#define GUI_2 LGUI(KC_2)
-#define GUI_3 LGUI(KC_3)
-#define GUI_4 LGUI(KC_4)
-#define GUI_5 LGUI(KC_5)
-#define GUI_6 LGUI(KC_6)
-#define GUI_7 LGUI(KC_7)
-#define GUI_8 LGUI(KC_8)
-#define GUI_9 LGUI(KC_9)
-#define GUI_0 LGUI(KC_0)
-#define GUI_MIN LGUI(KC_MINS)
-#define GUI_EQL LGUI(KC_EQL)
-#define GUI_LBR LGUI(KC_LBRC)
-#define GUI_RBR LGUI(KC_RBRC)
-#define GUI_ENT LGUI_T(KC_ENT)
-#define GUI_ESC LGUI_T(KC_ESC)
-#define GUI_TAB LGUI(KC_TAB) // application toggle
-#define GUI_GRV LGUI(KC_GRV) // window toggle
-#define GUI_SSF LGUI(LSFT(KC_3)) // Full screen shot
-#define GUI_SST LGUI(LSFT(KC_4)) // Targetted screen shot
+// GUI
+#define GUI_1    LGUI(KC_1)
+#define GUI_2    LGUI(KC_2)
+#define GUI_3    LGUI(KC_3)
+#define GUI_4    LGUI(KC_4)
+#define GUI_5    LGUI(KC_5)
+#define GUI_6    LGUI(KC_6)
+#define GUI_MIN  LGUI(KC_MINS)
+#define GUI_EQL  LGUI(KC_EQL)
+#define GUI_LBR  LGUI(KC_LBRC)
+#define GUI_RBR  LGUI(KC_RBRC)
+#define GUI_TAB  LGUI(KC_TAB)
+#define GUI_GRV  LGUI(KC_GRV)
+#define GUI_SSF  SGUI(KC_3) // Full screen shot
+#define GUI_SST  SGUI(KC_4) // Targetted screen shot
+#define WIN_UP   LCAG(KC_UP)
+#define WIN_DOWN LCAG(KC_DOWN)
+#define WIN_LEFT LCAG(KC_LEFT)
+#define WIN_RGHT LCAG(KC_RIGHT)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
-
-/* Qwerty
- * ,-----------------------------------------------------------------------------------------------------------.
- * |Tab/Alt |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    P   |   -    |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * | GUI/Esc|    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |  ;/nav |   "    |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * | Sft/ent|    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   | Sft/ent|
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |   UI   |  Del   |  Ctrl  |  Alt   |  GUI   |Bsp/Low |Spc/rais|  Ctrl  |   Alt  |  GUI   | Numpad |  Keybd |
- * `-----------------------------------------------------------------------------------------------------------'
- */
 [_BASE_LAYER] = LAYOUT_ortho_4x12(
+// |-----------------------------------------------------------------------------------------------------------|
     TAB_ALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
     GUI_ESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    SCL_NAV, KC_QUOT,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
     LSFT_ENT,KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_ENT,
-    L_UI,    KC_DEL,  KC_LCTL, KC_LALT, KC_LGUI, BSP_LOW, SPC_RAIS,KC_RCTL, KC_RALT, KC_RGUI, L_NUMPAD,L_KEYBD
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    L_UI,    KC_DEL,  KC_LCTL, KC_LALT, KC_LGUI, BSP_LOW, KC_SPACE,KC_RCTL, KC_RALT, KC_RCTL, KC_DEL,  L_UI
+// |-----------------------------------------------------------------------------------------------------------|
 ),
 
-
-/* Lower
- * ,-----------------------------------------------------------------------------------------------------------.
- * |   `    |    !   |    @   |    #   |    $   |    %   |    ^   |    &   |    *   |   +    |    =   |    -   |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |    1   |    2   |    3   |    4   |    5   |    6   |    7   |    8   |    9   |    0   |    \   |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |        |   ,    |    .   |    /   |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        | Space  |        |        |        |        |        |
- * `-----------------------------------------------------------------------------------------------------------'
- */
 [_LOWER_LAYER] = LAYOUT_ortho_4x12(
-    KC_GRV,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS, KC_EQL,  _______,
-    _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSLS,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_COMM, KC_DOT,  KC_SLSH, _______,
-    _______, _______, _______, _______, _______, _______, KC_SPACE, _______, _______, _______, _______, _______
+// |-----------------------------------------------------------------------------------------------------------|
+    _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_LCBR, KC_RCBR, KC_7,    KC_8,    KC_9,    KC_PLUS, _______,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_4,    KC_5,    KC_6,    KC_EQL,  _______,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, KC_BSLS, KC_PIPE, KC_GRV,  KC_TILD, KC_LBRC, KC_RBRC, KC_1,    KC_2,    KC_3,    KC_SLSH, _______,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  KC_COLN, _______, _______
+// |-----------------------------------------------------------------------------------------------------------|
 ),
 
-/* Raise
- * ,-----------------------------------------------------------------------------------------------------------.
- * |   ~    |   F1   |   F2   |   F3   |   F4   |   F5   |   F6   |   F7   |   F8   |    F9  |  F10   |   _    |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |    {   |    [   |    (   |   <    |    >   |    )   |    ]   |    }   |        |   |    |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |  Bksp  |        |        |        |        |        |        |
- * `-----------------------------------------------------------------------------------------------------------'
- */
-[_RAISE_LAYER] = LAYOUT_ortho_4x12(
-    KC_TILD, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_7,    KC_F8,   KC_F9,   KC_F10,  KC_UNDS,
-    _______, XXXXXXX, KC_LCBR, KC_LBRC, KC_LPRN, KC_LABK, KC_RABK, KC_RPRN, KC_RBRC, KC_RCBR, XXXXXXX, KC_PIPE,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, _______, _______, _______, _______, KC_BSPC, _______, _______, _______, _______, _______, _______
-),
-
-/* Numpad
- * ,-----------------------------------------------------------------------------------------------------------.
- * |        |        |        |        |        |        |        |   7    |    8   |   9    |   *    |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |   4    |    5   |   6    |   -    |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |   1    |    2   |   3    |   +    |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |   0    |    .   |   /    |        |        |
- * `-----------------------------------------------------------------------------------------------------------'
- */
-[_NUMPAD_LAYER] = LAYOUT_ortho_4x12(
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_7,    KC_8,    KC_9,    KC_ASTR, XXXXXXX,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_4,    KC_5,    KC_6,    KC_MINS, XXXXXXX,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_1,    KC_2,    KC_3,    KC_PLUS, _______,
-    _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  KC_SLSH, _______, _______
-),
-
-/* Navigation
- * ,-----------------------------------------------------------------------------------------------------------.
- * |        |        |        |        |        |        |        |  Home  |   Up   |  End   |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |  Left  |  Down  | Right  |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |   Del  |        |        |        |        |
- * `-----------------------------------------------------------------------------------------------------------'
- */
 [_NAVIGATION_LAYER] = LAYOUT_ortho_4x12(
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_HOME, KC_UP,   KC_END,  XXXXXXX, XXXXXXX,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    _______, _______, _______, _______, _______,  _______, _______, _______,  _______, _______, _______, _______
+// |-----------------------------------------------------------------------------------------------------------|
+    _______, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_HOME, KC_UP,   KC_END,  ___X___, ___X___,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_LEFT, KC_DOWN, KC_RGHT, ___X___, ___X___,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_PGDN, ___X___, KC_PGUP, ___X___, ___X___,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+// |-----------------------------------------------------------------------------------------------------------|
 ),
 
-/* UI
- * ,--------------------------------------------------------------------------------+--------+-----------------.
- * | GUI Tab|        |        |        |        |        |        |        |        | GUI -  | GUI =  |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * | GUI `  | GUI 1  |  GUI 2 |  GUI 3 |  GUI 4 |  GUI 5 | GUI 6  | GUI 7  |        | GUI [  | GUI ]  |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------------------------+--------|
- * |        |Full SS | Area SS|        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |  Prev  |  Play  | Next   | Vol -  |        |        |  Vol + |  Mute  |        |        |        |
- * `-----------------------------------------------------------------------------------------------------------'
- */
 [_UI_LAYER] = LAYOUT_ortho_4x12(
-    GUI_TAB, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GUI_MIN, GUI_EQL, XXXXXXX,
-    GUI_GRV, GUI_1,   GUI_2,   GUI_3,   GUI_4,   GUI_5,   GUI_6,   GUI_7,   XXXXXXX, GUI_LBR, GUI_RBR, XXXXXXX,
-    _______, GUI_SSF, GUI_SST, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    _______, KC_MRWD, KC_MPLY, KC_MFFD, KC_VOLD, KC_MUTE, KC_MUTE, KC_VOLU, _______, _______, _______, _______
-),
-
-/* Keyboard
- * ,--------------------------------------------------------------------------------+--------+-----------------.
- * |        |        |        |        |        |        |        |        |        |        |        | RESET  |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        | DEBUG  |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------------------------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |
- * `-----------------------------------------------------------------------------------------------------------'
- */
-[_KEYBOARD_LAYER] = LAYOUT_ortho_4x12(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RESET,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DEBUG,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______
+// |-----------------------------------------------------------------------------------------------------------|
+    _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   GUI_LBR, WIN_UP,  GUI_RBR, GUI_MIN, GUI_EQL,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, GUI_1,   GUI_2,   GUI_3,   GUI_4,   GUI_5,   GUI_6,   WIN_LEFT,WIN_DOWN,WIN_RGHT,GUI_TAB, GUI_GRV,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    KC_CAPS, GUI_SSF, GUI_SST, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_CAPS,
+// |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+    _______, KC_MRWD, KC_MPLY, KC_MFFD, KC_VOLD, KC_MUTE, KC_MUTE, KC_VOLU, KC_F14,  KC_F15,  _______, RESET
+// |-----------------------------------------------------------------------------------------------------------|
 ),
 };
 
+
 uint16_t get_tapping_term(uint16_t keycode) {
   switch (keycode) {
+    case BSP_LOW:
+      return TAPPING_TERM - 50;
     default:
       return TAPPING_TERM;
   }

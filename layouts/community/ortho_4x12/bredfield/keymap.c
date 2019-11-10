@@ -19,13 +19,14 @@ enum layer_names {
 #define L_UI     MO(_UI_LAYER)
 #define SCL_NAV  LT(_NAVIGATION_LAYER, KC_SCLN)
 #define BSP_LOW  LT(_LOWER_LAYER, KC_BSPC)
+#define DEL_UI LT(_UI_LAYER, KC_DEL)
 
 // Mod taps
 #define GUI_ESC  LGUI_T(KC_ESC)
 #define RSFT_ENT KC_SFTENT
 #define LSFT_ENT LSFT_T(KC_ENT)
 #define TAB_ALT  LALT_T(KC_TAB)
-#define CTL_QUOT LCTL_T(KC_QUOT)
+#define ENT_SHFT LSFT_T(KC_ENT)
 
 // GUI
 #define GUI_1    LGUI(KC_1)
@@ -59,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
     LSFT_ENT,KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_ENT,
 // |--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
-    L_UI,    KC_DEL,  KC_LCTL, KC_LALT, KC_LGUI, BSP_LOW, KC_SPACE,KC_RCTL, KC_RALT, KC_RCTL, KC_DEL,  L_UI
+    DEL_UI,  ___X___,KC_LALT, KC_LGUI, BSP_LOW, ENT_SHFT,KC_SPACE,KC_RCTL, KC_RALT, ___X___, ___X___,  DEL_UI
 // |-----------------------------------------------------------------------------------------------------------|
 ),
 

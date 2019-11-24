@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
 
-
 extern keymap_config_t keymap_config;
 
 // Keymap layers
@@ -30,6 +29,8 @@ enum layer_names {
 #define ENT_SHFT LSFT_T(KC_ENT)
 #define ENT_ALT  LALT_T(KC_ENT)
 #define TAB_CTL  LCTL_T(KC_TAB)
+#define MINS_SFT LSFT_T(KC_MINS)
+#define UNDS_SFT LSFT_T(KC_UNDS)
 
 // GUI chords
 #define GUI_1    LGUI(KC_1)
@@ -55,13 +56,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_BASE_LAYER] = LAYOUT(
 // |-----------------------------------------------------|                 |-----------------------------------------------------|
-    TAB_ALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
+    TAB_ALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_GRV,
 // |--------|--------|--------|--------|--------|--------|                 |--------|--------|--------|--------|--------|--------|
     GUI_ESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                      KC_H,    KC_J,    KC_K,    KC_L,    SCL_NAV, KC_QUOT,
 // |--------|--------|--------|--------|--------|--------|                 |--------|--------|--------|--------|--------|--------|
-    LSFT_ENT,KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                      KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_ENT,
+    KC_UNDS, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                      KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, MINS_SFT,
 // |--------|--------|--------|--------|--------|--------|-----------------|--------|--------|--------|--------|--------|--------|
-    DEL_UI,  ___X___, ___X___, ___X___, KC_LGUI, BSP_LOW, ENT_SHFT,TAB_CTL, KC_SPACE,KC_RALT, ___X___, ___X___, ___X___, DEL_UI
+    DEL_UI,  ___X___, ___X___, ___X___, KC_LGUI, BSP_LOW, ENT_SHFT,KC_SPACE,TAB_CTL, KC_RALT, ___X___, ___X___, ___X___, DEL_UI
 // |-----------------------------------------------------------------------------------------------------------------------------|
 ),
 

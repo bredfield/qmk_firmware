@@ -26,7 +26,7 @@ enum custom_keycodes {
   RGBRST
 };
 
-enum macro_keycodes {
+enumkl {
   KC_SAMPLEMACRO,
 };
 

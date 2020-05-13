@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 
 uint16_t copy_paste_timer;
+uint16_t enter_space_timer;
 
 enum layers {
     QWERTY = 0,
@@ -11,7 +12,7 @@ enum layers {
 };
 
 enum custom_keycodes {
-    KC_CCCV = SAFE_RANGE
+    ENTSPC = SAFE_RANGE
 };
 
 // Layer switches aliases
@@ -49,35 +50,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    |----------------------------------------------------|                                    |----------------------------------------------------|
       KC_ESC,  H_A,     H_S,     H_D,     H_F,     H_G,                                         H_H,     H_J,     H_K,      H_L,     H_SCLN,  KC_QUOT,
 //    |----------------------------------------------------+------------------------------------+----------------------------------------------------|
-      KC_UNDS, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_PIPE, KC_SPACE,KC_LEAD, KC_EQL,  KC_N,    KC_M,    KC_COMM,  KC_DOT,  KC_SLSH, KC_MINS,
+      KC_EQL,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_HASH, KC_SPACE,KC_LEAD, KC_ASTR, KC_N,    KC_M,    KC_COMM,  KC_DOT,  KC_SLSH, KC_MINS,
 //    |----------------------------------------------------+------------------------------------+----------------------------------------------------|
-                                 KC_LALT, KC_AMPR, ESC_LOW, BSP_SFT, KC_ENT,  KC_DEL,  SPC_NAV, TAB_RSE, KC_ASTR, KC_RALT
+                                 XXXXXXX, KC_AMPR, ESC_LOW, BSP_SFT, KC_ENTER,KC_DEL,  SPC_NAV, TAB_RSE, KC_PIPE, XXXXXXX
 //                               |---------------------------------------------------------------------------------------|
     ),
 
-
-//  Lower: Numpad & Media
+// Lower: Numberpad & Symbols
     [LOWER] = LAYOUT(
-//    ,----------------------------------------------------.                                    ,---/---------------------------------,--------=-----.
-      _______, _______, _______, KC_VOLU, _______, _______,                                     KC_SLSH, KC_7,    KC_8,    KC_9,    KC_COMM, _______,
-//    |----------------------------------------------------|                                    |---*---------------------------------.--------+----|
-      _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______,                                     KC_ASTR, KC_4,    KC_5,    KC_6,    KC_DOT, KC_PLUS,
-//    |----------------------------------------------------+------------------------------------+-------------------------------------.--------------|
-      _______, _______, _______, KC_VOLD, KC_MUTE, _______, _______, _______, _______, _______, _______, KC_1,    KC_2,    KC_3,    KC_0,   _______,
-//    |----------------------------------------------------+------------------------------------+----------------------------------------------------|
+//    ,----------!--------@--------#--------$--------%-----.                                    ,---/---------------------------------,--------------.
+      _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                                     KC_SLSH, KC_7,    KC_8,    KC_9,    KC_COMM, _______,
+//    |----------^--------&--------*--------|--------\-----|                                    |---+---------------------------------.--------------|
+      _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_PIPE, KC_BSLS,                                     KC_PLUS, KC_4,    KC_5,    KC_6,    KC_DOT,  _______,
+//    |----------------------------------------------------+------------------------------------+---_---------------------------------.--------------|
+      _______, GUI_SSF, GUI_SST, _______, _______, _______, _______, _______, _______, _______, KC_UNDS, KC_1,    KC_2,    KC_3,    KC_0,    _______,
+//    |-------------------------------------------------+---------------------------------------+----------------------------------------------------|
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 //                               |---------------------------------------------------------------------------------------|
     ),
 
-// Raise: Symbols
+//  Raise: Brackets & Media
     [RAISE] = LAYOUT(
-//    ,----------!--------@--------{--------}--------|-----.                                    ,----------_--------\--------------------------=-----.
-      _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE,                                     _______, KC_UNDS, KC_BSLS, _______, _______, _______,
-//    |----------#--------$--------(--------)--------`-----|                                    |-+-----------------/--------*--------%--------"-----|
-      _______, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,                                      KC_PLUS, KC_MINS, KC_SLSH, KC_ASTR, KC_PERC, _______,
-//    |----------%--------^--------[--------]--------~-----+------------------------------------+-&--------=--------,--------.--------/--------------|
-      _______, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD, _______, _______, _______, _______, KC_AMPR, KC_EQL,  KC_COMM, KC_DOT,  KC_SLSH, _______,
-//    |-------------------------------------------------+-----------------------------------------+--------------------------------------------------|
+//    ,----------------------------------------------------.                                    ,----------{--------}--------------------------------.
+      _______, KC_PAUS, _______, KC_VOLU, _______, _______,                                     _______, KC_LCBR, KC_RCBR, _______, _______, _______,
+//    |----------------------------------------------------|                                    |----------(--------)--------------------------------|
+      _______, KC_SLCK, KC_MPRV, KC_MPLY, KC_MNXT, _______,                                     _______, KC_LPRN, KC_RPRN, _______, _______, _______,
+//    |----------------------------------------------------+------------------------------------+----------[--------]--------------------------------|
+      _______, _______, _______, KC_VOLD, KC_MUTE, _______, _______, _______, _______, _______, _______, KC_LBRC, KC_RBRC, _______, _______, _______,
+//    |----------------------------------------------------+--------------------------------------+--------------------------------------------------|
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 //                               |---------------------------------------------------------------------------------------|
     ),
@@ -127,15 +127,15 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case KC_CCCV:  // One key copy/paste
+        case ENTSPC:  // Enter / hold space
             if (record->event.pressed) {
-                copy_paste_timer = timer_read();
+                enter_space_timer = timer_read();
+                register_code(KC_SPACE);
             } else {
-                if (timer_elapsed(copy_paste_timer) > TAPPING_TERM) {  // Hold, copy
-                    tap_code16(LGUI(KC_C));
-                } else { // Tap, paste
-                    tap_code16(LGUI(KC_V));
+                if (timer_elapsed(enter_space_timer) < TAPPING_TERM) {
+                    tap_code16(KC_ENTER);
                 }
+                unregister_code(KC_SPACE);
             }
             break;
     }
@@ -145,7 +145,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 uint16_t get_tapping_term(uint16_t keycode) {
   switch (keycode) {
     case BSP_SFT:
-        return TAPPING_TERM - 50;
+        return TAPPING_TERM - 100;
     default:
       return TAPPING_TERM;
   }
@@ -157,9 +157,20 @@ void matrix_scan_user(void) {
     LEADER_DICTIONARY() {
         leading = false;
         leader_end();
+        // Programming
         SEQ_ONE_KEY(KC_C) { // Inline Code
             SEND_STRING("`` " SS_TAP(X_LEFT) SS_TAP(X_LEFT));
         }
+        SEQ_TWO_KEYS(KC_G, KC_A) {
+            SEND_STRING("git add .; git commit -am ''" SS_TAP(X_LEFT));
+        }
+        SEQ_TWO_KEYS(KC_D, KC_E) {
+            SEND_STRING("/srv/docker-entrypoint.sh ");
+        }
+        SEQ_TWO_KEYS(KC_D, KC_S) {
+            SEND_STRING("python manage.py shell");
+        }
+        // Emails
         SEQ_TWO_KEYS(KC_E, KC_D) { // Email Density
             SEND_STRING("ben@density.io");
         }
@@ -168,6 +179,22 @@ void matrix_scan_user(void) {
         }
         SEQ_TWO_KEYS(KC_E, KC_B) { // Email Bread
             SEND_STRING("ben@madebybread.com");
+        }
+        // Emojis
+        SEQ_ONE_KEY(KC_V) { // V
+            SEND_STRING(":v:");
+        }
+        SEQ_ONE_KEY(KC_O) { // Okay
+            SEND_STRING(":ok_hand:");
+        }
+        SEQ_ONE_KEY(KC_EQL) { // Thumbs up
+            SEND_STRING(":+1:");
+        }
+        SEQ_ONE_KEY(KC_MINS) { // Thumbs down
+            SEND_STRING(":-1:");
+        }
+        SEQ_TWO_KEYS(KC_C, KC_K) { // Chef kiss
+            SEND_STRING(":chefkiss:");
         }
     }
 }
